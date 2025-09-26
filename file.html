@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quick Website — One File</title>
+  <meta name="description" content="A clean, responsive single-file starter website." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --muted:#94a3b8;
+      --accent:#7c3aed;
+      --glass: rgba(255,255,255,0.04);
+      --radius:14px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial; background:linear-gradient(180deg,var(--bg),#061024); color:#e6eef8}
+    .container{max-width:1100px;margin:36px auto;padding:24px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo .mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:700}
+    nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-weight:600}
+    .hero{display:grid;grid-template-columns:1fr 380px;gap:28px;align-items:center;margin-top:34px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:var(--radius);padding:24px;box-shadow:0 8px 30px rgba(2,6,23,0.6);}
+    h1{margin:0;font-size:clamp(24px,3.6vw,40px)}
+    p.lead{color:var(--muted);margin-top:12px}
+    .cta{margin-top:18px;display:flex;gap:10px}
+    .btn{padding:10px 16px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),#06b6d4);color:white}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+    .feature h3{margin:6px 0 0 0}
+    .side-form label{display:block;color:var(--muted);font-size:14px;margin-bottom:8px}
+    input[type=text],input[type=email],textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
+    footer{margin-top:36px;padding:18px;text-align:center;color:var(--muted);font-size:14px}
+    @media (max-width:880px){
+      .hero{grid-template-columns:1fr;}
+      .features{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="mark">Q</div>
+        <div>
+          <div style="font-weight:700">QuickSite</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">One-file starter</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <main class="card">
+        <h1>Beautiful, minimal starter website — 1 file</h1>
+        <p class="lead">Use this clean, responsive template to prototype landing pages, side projects, or portfolios. No build step — just open index.html.</p>
+        <div class="cta">
+          <button class="btn btn-primary">Get started</button>
+          <button class="btn btn-ghost">Learn more</button>
+        </div>
+
+        <div id="features" class="features">
+          <div class="feature card">
+            <strong>Responsive</strong>
+            <h3>Looks great on mobile</h3>
+            <p style="color:var(--muted)">Layouts adapt automatically using simple CSS grid and flex.</p>
+          </div>
+          <div class="feature card">
+            <strong>Accessible</strong>
+            <h3>Keyboard + screen-reader friendly</h3>
+            <p style="color:var(--muted)">Clear semantic markup and readable contrast by default.</p>
+          </div>
+          <div class="feature card">
+            <strong>Customizable</strong>
+            <h3>Easy colors &amp; fonts</h3>
+            <p style="color:var(--muted)">Tweak CSS variables at the top to change the look fast.</p>
+          </div>
+        </div>
+
+      </main>
+
+      <aside class="card side-form">
+        <h3 style="margin-top:0">Join the beta</h3>
+        <p style="color:var(--muted)">Enter your email and we'll send a download link.</p>
+        <form onsubmit="event.preventDefault();alert('Thanks! This demo doesn\'t send emails.');">
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Your name" />
+          <label for="email" style="margin-top:12px">Email</label>
+          <input id="email" type="email" placeholder="you@example.com" />
+          <div style="margin-top:12px"><button class="btn btn-primary" style="width:100%">Notify me</button></div>
+        </form>
+
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:16px 0">
+        <div style="font-size:13px;color:var(--muted)"><strong>Quick tips</strong>
+          <ul style="padding-left:18px;margin:8px 0 0 0;color:var(--muted)">
+            <li>Replace hero text and links</li>
+            <li>Swap colors in :root</li>
+            <li>Remove Google Fonts if offline</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+
+    <section id="pricing" style="margin-top:26px">
+      <div class="card">
+        <h2 style="margin:0 0 8px 0">Pricing</h2>
+        <p style="color:var(--muted)">Free to use — adapt for personal or commercial projects.</p>
+        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div class="card" style="flex:1;min-width:180px">
+            <strong>Starter</strong>
+            <p style="margin:8px 0 0 0;color:var(--muted)">Basic landing, unlimited prototypes.</p>
+          </div>
+          <div class="card" style="flex:1;min-width:180px">
+            <strong>Pro</strong>
+            <p style="margin:8px 0 0 0;color:var(--muted)">Add analytics, custom domain (example only).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contact">
+      <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <strong>QuickSite</strong>
+          <div style="color:var(--muted);margin-top:6px">Made with ❤️ — copy and adapt freely.</div>
+        </div>
+        <div style="color:var(--muted);font-size:13px">Contact — hello@example.com</div>
+      </div>
+      <div style="margin-top:12px;color:var(--muted)">© <span id="year"></span> QuickSite. All rights reserved.</div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
