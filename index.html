@@ -1,146 +1,433 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Quick Website — One File</title>
-  <meta name="description" content="A clean, responsive single-file starter website." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0f1724;
-      --card:#0b1220;
-      --muted:#94a3b8;
-      --accent:#7c3aed;
-      --glass: rgba(255,255,255,0.04);
-      --radius:14px;
-      color-scheme: dark;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial; background:linear-gradient(180deg,var(--bg),#061024); color:#e6eef8}
-    .container{max-width:1100px;margin:36px auto;padding:24px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .logo{display:flex;align-items:center;gap:12px}
-    .logo .mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:700}
-    nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-weight:600}
-    .hero{display:grid;grid-template-columns:1fr 380px;gap:28px;align-items:center;margin-top:34px}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:var(--radius);padding:24px;box-shadow:0 8px 30px rgba(2,6,23,0.6);}
-    h1{margin:0;font-size:clamp(24px,3.6vw,40px)}
-    p.lead{color:var(--muted);margin-top:12px}
-    .cta{margin-top:18px;display:flex;gap:10px}
-    .btn{padding:10px 16px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
-    .btn-primary{background:linear-gradient(90deg,var(--accent),#06b6d4);color:white}
-    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
-    .feature h3{margin:6px 0 0 0}
-    .side-form label{display:block;color:var(--muted);font-size:14px;margin-bottom:8px}
-    input[type=text],input[type=email],textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
-    footer{margin-top:36px;padding:18px;text-align:center;color:var(--muted);font-size:14px}
-    @media (max-width:880px){
-      .hero{grid-template-columns:1fr;}
-      .features{grid-template-columns:1fr}
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MediaPlayer — Spotify Web</title>
+<link rel="icon" href="data:," />
+<style>
+  :root{
+    --bg:#0b0b0b; --panel:#0f1113; --muted:#9aa0a6;
+    --accent:#1DB954; --card:#151515; --control:#222;
+    --text:#e6e6e6;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#070707,#0c0c0c);font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);}
+  .app{display:grid;grid-template-columns:220px 1fr 260px;grid-template-rows:1fr 120px;height:100vh;gap:10px;padding:12px}
+  /* Left sidebar */
+  .sidebar{background:var(--panel);padding:14px;border-radius:10px;display:flex;flex-direction:column;gap:8px}
+  .brand{font-weight:800;font-size:18px;color:var(--text)}
+  .load-info{font-size:12px;color:var(--muted)}
+  .playlist-list{flex:1;overflow:auto;margin-top:6px;padding-right:6px}
+  .playlist-item{padding:10px;border-radius:8px;margin-bottom:8px;background:transparent;cursor:pointer;color:var(--text);display:flex;justify-content:space-between;align-items:center}
+  .playlist-item:hover{background:#121212}
+  .playlist-item.active{background:linear-gradient(90deg, rgba(29,185,84,0.08), transparent);border-left:3px solid var(--accent);padding-left:8px}
+  .small{font-size:12px;color:var(--muted)}
+
+  /* Center area */
+  .center{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .heading{width:100%;max-width:980px;font-weight:700;font-size:16px;color:var(--text)}
+  .songs-wrap{width:100%;max-width:980px;display:flex;flex-direction:column;align-items:center;overflow:auto;padding-bottom:12px}
+  .song-row{width:100%;background:var(--card);display:flex;align-items:center;padding:12px;border-radius:10px;margin-bottom:10px;gap:12px;cursor:pointer}
+  .song-row:hover{background:#1b1b1b; transform: translateY(-1px);}
+  .song-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px}
+  .song-duration{width:72px;text-align:right;color:var(--muted);font-size:13px}
+  .dots-btn{width:36px;height:36px;border-radius:8px;background:var(--control);display:flex;align-items:center;justify-content:center;color:var(--text);border:none;cursor:pointer}
+  .dots-btn:hover{background:var(--accent);color:#021603}
+
+  /* Right queue */
+  .queue-panel{background:var(--panel);padding:14px;border-radius:10px;display:flex;flex-direction:column;gap:8px}
+  .queue-title{font-weight:700;color:var(--text)}
+  .queue-list{flex:1;overflow:auto}
+  .queue-item{padding:10px;border-radius:8px;margin-bottom:6px;background:#151515;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+
+  /* Bottom player */
+  .bottom{grid-column:1 / span 3;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(180deg,#0c0c0c,#0a0a0a);border-radius:10px}
+  .now-playing{display:flex;align-items:center;gap:12px;min-width:240px}
+  .np-title{font-weight:600}
+  .controls{display:flex;flex-direction:column;align-items:center;flex:1;gap:8px}
+  .buttons{display:flex;gap:14px;align-items:center}
+  .circle-btn{width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#05100b;border:none;font-size:20px;cursor:pointer;box-shadow:0 6px 16px rgba(29,185,84,.14)}
+  .small-btn{width:44px;height:44px;border-radius:10px;background:var(--control);border:none;color:var(--text);cursor:pointer}
+  .seek-row{display:flex;align-items:center;gap:10px;width:88%;max-width:980px}
+  .time{width:100px;text-align:center;color:var(--muted);font-size:13px;cursor:pointer}
+  input[type="range"]{appearance:none;width:100%;height:8px;border-radius:8px;background:#222;outline:none}
+  input[type="range"]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid #0b0b0b;box-shadow:0 2px 8px rgba(0,0,0,.6)}
+  /* volume vertical */
+  .vol-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .vol-icon{font-size:18px}
+  .vol-slider{transform:rotate(-90deg);width:140px}
+
+  @media (max-width:980px){
+    .app{grid-template-columns:1fr;grid-template-rows:140px 1fr 160px;padding:10px}
+    .queue-panel{display:none}
+  }
+  /* tiny utility */
+  .muted{color:var(--muted);font-size:13px}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="logo">
-        <div class="mark">Q</div>
-        <div>
-          <div style="font-weight:700">QuickSite</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">One-file starter</div>
-        </div>
-      </div>
-      <nav>
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
-
-    <section class="hero">
-      <main class="card">
-        <h1>Beautiful, minimal starter website — 1 file</h1>
-        <p class="lead">Use this clean, responsive template to prototype landing pages, side projects, or portfolios. No build step — just open index.html.</p>
-        <div class="cta">
-          <button class="btn btn-primary">Get started</button>
-          <button class="btn btn-ghost">Learn more</button>
-        </div>
-
-        <div id="features" class="features">
-          <div class="feature card">
-            <strong>Responsive</strong>
-            <h3>Looks great on mobile</h3>
-            <p style="color:var(--muted)">Layouts adapt automatically using simple CSS grid and flex.</p>
-          </div>
-          <div class="feature card">
-            <strong>Accessible</strong>
-            <h3>Keyboard + screen-reader friendly</h3>
-            <p style="color:var(--muted)">Clear semantic markup and readable contrast by default.</p>
-          </div>
-          <div class="feature card">
-            <strong>Customizable</strong>
-            <h3>Easy colors &amp; fonts</h3>
-            <p style="color:var(--muted)">Tweak CSS variables at the top to change the look fast.</p>
-          </div>
-        </div>
-
-      </main>
-
-      <aside class="card side-form">
-        <h3 style="margin-top:0">Join the beta</h3>
-        <p style="color:var(--muted)">Enter your email and we'll send a download link.</p>
-        <form onsubmit="event.preventDefault();alert('Thanks! This demo doesn\'t send emails.');">
-          <label for="name">Name</label>
-          <input id="name" type="text" placeholder="Your name" />
-          <label for="email" style="margin-top:12px">Email</label>
-          <input id="email" type="email" placeholder="you@example.com" />
-          <div style="margin-top:12px"><button class="btn btn-primary" style="width:100%">Notify me</button></div>
-        </form>
-
-        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:16px 0">
-        <div style="font-size:13px;color:var(--muted)"><strong>Quick tips</strong>
-          <ul style="padding-left:18px;margin:8px 0 0 0;color:var(--muted)">
-            <li>Replace hero text and links</li>
-            <li>Swap colors in :root</li>
-            <li>Remove Google Fonts if offline</li>
-          </ul>
-        </div>
-      </aside>
-    </section>
-
-    <section id="pricing" style="margin-top:26px">
-      <div class="card">
-        <h2 style="margin:0 0 8px 0">Pricing</h2>
-        <p style="color:var(--muted)">Free to use — adapt for personal or commercial projects.</p>
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div class="card" style="flex:1;min-width:180px">
-            <strong>Starter</strong>
-            <p style="margin:8px 0 0 0;color:var(--muted)">Basic landing, unlimited prototypes.</p>
-          </div>
-          <div class="card" style="flex:1;min-width:180px">
-            <strong>Pro</strong>
-            <p style="margin:8px 0 0 0;color:var(--muted)">Add analytics, custom domain (example only).</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer id="contact">
-      <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-        <div>
-          <strong>QuickSite</strong>
-          <div style="color:var(--muted);margin-top:6px">Made with ❤️ — copy and adapt freely.</div>
-        </div>
-        <div style="color:var(--muted);font-size:13px">Contact — hello@example.com</div>
-      </div>
-      <div style="margin-top:12px;color:var(--muted)">© <span id="year"></span> QuickSite. All rights reserved.</div>
-    </footer>
+<div class="app">
+  <!-- LEFT -->
+  <div class="sidebar">
+    <div>
+      <div class="brand">MediaPlayer</div>
+      <div class="small muted">GitHub: YousefTantawy / MediaPlayer</div>
+    </div>
+    <div class="load-info muted">Auto-loading playlists from the repository (branch: <span id="branchLabel">main</span>)</div>
+    <div class="playlist-list" id="playlists"></div>
   </div>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  <!-- CENTER -->
+  <div class="center">
+    <div class="heading" id="heading">Playlists</div>
+    <div class="songs-wrap" id="songsWrap"></div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="queue-panel">
+    <div class="queue-title">Queue</div>
+    <div class="queue-list" id="queueList"></div>
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="bottom">
+    <div class="now-playing">
+      <div class="np-title" id="nowPlaying">Welcome — loading repo...</div>
+    </div>
+
+    <div class="controls">
+      <div class="buttons">
+        <button id="prevBtn" class="small-btn" title="Previous">⏮</button>
+        <button id="playBtn" class="circle-btn" title="Play/Pause">▶</button>
+        <button id="nextBtn" class="small-btn" title="Next">⏭</button>
+      </div>
+
+      <div class="seek-row">
+        <div class="time" id="timeLabel">00:00 / 00:00</div>
+        <input id="seek" type="range" min="0" max="100" step="0.1" value="0" />
+        <div style="width:8px"></div>
+      </div>
+    </div>
+
+    <div class="vol-wrap" title="Volume">
+      <div class="vol-icon">🔊</div>
+      <input id="volume" class="vol-slider" type="range" min="0" max="100" value="70" />
+    </div>
+  </div>
+</div>
+
+<audio id="audio" crossorigin="anonymous"></audio>
+
+<script>
+/*
+  GitHub-driven Spotify-style web player
+  - USER and REPO prefilled below
+  - Automatically lists top-level folders as playlists and mp3 files as songs
+  - Streams raw.githubusercontent.com URLs
+  - Handles errors, queue, seek, volume, time jump
+*/
+
+const GITHUB_USER = 'YousefTantawy';
+const GITHUB_REPO = 'MediaPlayer';
+let GITHUB_BRANCH = 'main'; // change here if your repo default branch is 'master' etc.
+
+// DOM
+const playlistsEl = document.getElementById('playlists');
+const songsWrap = document.getElementById('songsWrap');
+const queueList = document.getElementById('queueList');
+const audio = document.getElementById('audio');
+const playBtn = document.getElementById('playBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const seek = document.getElementById('seek');
+const timeLabel = document.getElementById('timeLabel');
+const nowPlaying = document.getElementById('nowPlaying');
+const volume = document.getElementById('volume');
+document.getElementById('branchLabel').textContent = GITHUB_BRANCH;
+
+// app state
+let library = {};       // { playlistName: [ {name, path, url} ] }
+let playlists = [];     // order
+let currentPlaylist = null;
+let currentIndex = null;
+let queue = [];
+let isSeeking = false;
+
+// helper format
+function fmtTime(t){
+  if (!isFinite(t)) return "00:00";
+  const s = Math.floor(t);
+  const m = Math.floor(s/60);
+  const sec = s % 60;
+  return `${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+}
+
+// GitHub API helpers
+async function ghFetch(path=''){
+  // path is relative to repo root, empty string for root
+  const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${path}?ref=${GITHUB_BRANCH}`;
+  const r = await fetch(url);
+  if (r.status===404) throw new Error('Repository or path not found (404). Check repo/branch.');
+  if (r.status===403) {
+    const txt = await r.text();
+    throw new Error('GitHub API rate limit or access denied: ' + txt.slice(0,200));
+  }
+  return r.json();
+}
+
+function rawUrlFor(path){
+  // raw.githubusercontent.com /user/repo/branch/path
+  return `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}`;
+}
+
+// Build library: list root, find directories, then list mp3 files inside each dir
+async function buildLibrary(){
+  try {
+    nowPlaying.textContent = 'Loading repository...';
+    const root = await ghFetch('');
+    // root is array of items in repo root
+    const dirs = root.filter(it => it.type === 'dir');
+    // allow mp3s at root as 'Root' playlist
+    const rootFiles = root.filter(it => it.type==='file' && /\.(mp3|wav|ogg|m4a)$/i.test(it.name));
+    library = {};
+    playlists = [];
+
+    // root files -> 'Root' playlist if present
+    if (rootFiles.length){
+      library['Root'] = rootFiles.map(f=>({name:f.name,path:f.path,url:rawUrlFor(f.path)}));
+      playlists.push('Root');
+    }
+
+    // for each dir, fetch contents and gather mp3 files
+    for (const d of dirs){
+      try{
+        const sub = await ghFetch(d.path);
+        const mp3s = sub.filter(it=>it.type==='file' && /\.(mp3|wav|ogg|m4a)$/i.test(it.name))
+                        .map(f=>({name:f.name,path:f.path,url:rawUrlFor(f.path)}));
+        if (mp3s.length){
+          library[d.name] = mp3s;
+          playlists.push(d.name);
+        }
+      }catch(err){
+        console.warn('Failed to list directory', d.path, err);
+      }
+    }
+
+    if (!playlists.length){
+      nowPlaying.textContent = 'No playlists or MP3s found in repo.';
+      songsWrap.innerHTML = '<div class="muted">Add folders and MP3s to the repo root to create playlists.</div>';
+      playlistsEl.innerHTML = '';
+      return;
+    }
+
+    renderPlaylists();
+    selectPlaylist(playlists[0]);
+    nowPlaying.textContent = 'Ready — select a playlist';
+  } catch (err){
+    console.error(err);
+    nowPlaying.textContent = 'Error loading repo: ' + err.message;
+    songsWrap.innerHTML = `<div class="muted">Error: ${err.message}</div>`;
+  }
+}
+
+// UI renderers
+function renderPlaylists(){
+  playlistsEl.innerHTML = '';
+  for (const pl of playlists){
+    const el = document.createElement('div');
+    el.className = 'playlist-item' + (pl===currentPlaylist ? ' active' : '');
+    el.innerHTML = `<div style="flex:1;overflow:hidden;text-overflow:ellipsis">${pl}</div><div class="muted">${library[pl].length}</div>`;
+    el.onclick = ()=> selectPlaylist(pl);
+    playlistsEl.appendChild(el);
+  }
+}
+
+function selectPlaylist(name){
+  currentPlaylist = name;
+  renderPlaylists();
+  renderSongs();
+}
+
+function renderSongs(){
+  songsWrap.innerHTML = '';
+  if (!currentPlaylist) return;
+  const arr = library[currentPlaylist];
+  for (let i=0;i<arr.length;i++){
+    const it = arr[i];
+    const row = document.createElement('div');
+    row.className='song-row';
+    row.onclick = ()=> playFromPlaylist(currentPlaylist, i);
+
+    const title = document.createElement('div');
+    title.className='song-title';
+    title.textContent = it.name;
+
+    const dur = document.createElement('div');
+    dur.className='song-duration';
+    dur.textContent = '--:--';
+
+    // try fetch range HEAD to get content-length? simpler: create temp audio to read metadata
+    const tmp = document.createElement('audio');
+    tmp.src = it.url;
+    tmp.preload = 'metadata';
+    tmp.onloadedmetadata = ()=> dur.textContent = fmtTime(tmp.duration);
+    tmp.onerror = ()=> dur.textContent = 'ERR';
+
+    const dots = document.createElement('button');
+    dots.className='dots-btn';
+    dots.textContent='⋮';
+    dots.onclick = (ev)=> { ev.stopPropagation(); addToQueueByItem(currentPlaylist, i); };
+
+    row.appendChild(title);
+    row.appendChild(dur);
+    row.appendChild(dots);
+    songsWrap.appendChild(row);
+  }
+}
+
+// playback
+function playFromPlaylist(pl, index){
+  const item = library[pl][index];
+  if (!item) return;
+  if (currentPlaylist===pl && currentIndex===index && !audio.paused){
+    audio.pause(); playBtn.textContent='▶'; return;
+  }
+  currentPlaylist = pl; currentIndex = index;
+  loadAndPlay(item);
+}
+
+async function loadAndPlay(item, startTime=0){
+  try {
+    audio.src = item.url;
+    // small hack: set currentTime after metadata loaded for some hosts
+    audio.currentTime = startTime || 0;
+    await audio.play();
+    playBtn.textContent = '⏸';
+    nowPlaying.textContent = `${item.name} • ${currentPlaylist}`;
+  } catch(e){
+    alert('Playback error: cannot play this file. Skipping.');
+    console.error('Playback error', e);
+    skipNext();
+  }
+}
+
+// controls
+playBtn.addEventListener('click', ()=>{
+  if (!audio.src){
+    if (playlists.length) selectPlaylist(playlists[0]) , playFromPlaylist(playlists[0],0);
+    return;
+  }
+  if (audio.paused) { audio.play(); playBtn.textContent='⏸'; }
+  else { audio.pause(); playBtn.textContent='▶'; }
+});
+prevBtn.addEventListener('click', ()=>{
+  if (!audio.src) return;
+  if (audio.currentTime > 5) audio.currentTime = 0;
+  else playPrev();
+});
+nextBtn.addEventListener('click', skipNext);
+
+// queue
+function addToQueueByItem(pl, idx){
+  const item = library[pl][idx];
+  if (!item) return;
+  queue.push({playlist:pl,index:idx,item});
+  renderQueue();
+}
+function renderQueue(){
+  queueList.innerHTML = '';
+  queue.forEach((q,i)=>{
+    const d = document.createElement('div');
+    d.className='queue-item';
+    d.innerHTML = `<div style="max-width:180px;overflow:hidden;text-overflow:ellipsis">${q.item.name}</div>
+                   <div style="display:flex;gap:6px"><button class="btn-q" data-i="${i}" data-action="up">△</button><button class="btn-q" data-i="${i}" data-action="del">✕</button></div>`;
+    queueList.appendChild(d);
+  });
+  // handlers
+  Array.from(queueList.querySelectorAll('.btn-q')).forEach(b=>{
+    b.onclick = (ev)=>{
+      const i = Number(b.dataset.i); const a = b.dataset.action;
+      if (a==='del'){ queue.splice(i,1); renderQueue(); }
+      else if (a==='up' && i>0){ [queue[i-1],queue[i]] = [queue[i],queue[i-1]]; renderQueue(); }
+    };
+  });
+}
+
+// next / prev logic
+function skipNext(){
+  if (queue.length){
+    const next = queue.shift();
+    renderQueue();
+    currentPlaylist = next.playlist;
+    currentIndex = next.index;
+    loadAndPlay(next.item);
+    renderPlaylists(); selectPlaylist(currentPlaylist);
+    return;
+  }
+  if (!currentPlaylist) return;
+  const arr = library[currentPlaylist];
+  if (currentIndex === null || currentIndex === undefined) { if (arr.length) playFromPlaylist(currentPlaylist,0); return; }
+  if (currentIndex + 1 < arr.length) playFromPlaylist(currentPlaylist, currentIndex+1);
+  else { audio.pause(); audio.currentTime=0; playBtn.textContent='▶'; }
+}
+function playPrev(){
+  if (currentPlaylist && currentIndex>0) playFromPlaylist(currentPlaylist, currentIndex-1);
+  else audio.currentTime=0;
+}
+
+// audio events
+audio.addEventListener('timeupdate', ()=>{
+  if (!isSeeking && audio.duration){
+    seek.max = audio.duration;
+    seek.value = audio.currentTime;
+    timeLabel.textContent = `${fmtTime(audio.currentTime)} / ${fmtTime(audio.duration)}`;
+  }
+});
+audio.addEventListener('ended', ()=> { playBtn.textContent='▶'; skipNext(); });
+audio.addEventListener('error', (e)=> {
+  alert('Playback error: file cannot be played. Skipping.');
+  console.error('Audio error', e);
+  skipNext();
+});
+
+// seek and time edit
+seek.addEventListener('input', ()=> {
+  isSeeking = true;
+  timeLabel.textContent = `${fmtTime(seek.value)} / ${fmtTime(seek.max)}`;
+});
+seek.addEventListener('change', ()=> {
+  isSeeking = false;
+  audio.currentTime = Number(seek.value);
+});
+timeLabel.addEventListener('click', ()=>{
+  const cur = audio.duration ? fmtTime(audio.currentTime) : '00:00';
+  const s = prompt('Jump to time (mm:ss or seconds):', cur);
+  if (!s) return;
+  let secs = 0;
+  if (s.includes(':')){
+    const parts = s.split(':').map(p=>Number(p));
+    secs = parts.length===2 ? parts[0]*60 + parts[1] : Number(s);
+  } else secs = Number(s);
+  if (isFinite(secs) && audio.duration) audio.currentTime = Math.max(0, Math.min(secs, audio.duration));
+  else alert('Invalid time or no duration yet.');
+});
+
+// volume
+volume.addEventListener('input', ()=> audio.volume = Number(volume.value)/100);
+audio.volume = Number(volume.value)/100;
+
+// keyboard
+document.addEventListener('keydown', (e)=>{
+  if (e.code==='Space'){ e.preventDefault(); playBtn.click(); }
+  else if (e.code==='ArrowRight') audio.currentTime = Math.min((audio.currentTime||0)+5, audio.duration||0);
+  else if (e.code==='ArrowLeft') audio.currentTime = Math.max((audio.currentTime||0)-5, 0);
+  else if (e.code==='ArrowUp'){ volume.value = Math.min(100, Number(volume.value)+5); volume.dispatchEvent(new Event('input')); }
+  else if (e.code==='ArrowDown'){ volume.value = Math.max(0, Number(volume.value)-5); volume.dispatchEvent(new Event('input')); }
+});
+
+// initial load
+buildLibrary();
+</script>
 </body>
 </html>
