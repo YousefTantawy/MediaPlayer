@@ -1,0 +1,78 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+}
+
+body {
+  margin: 0;
+  background: #121212;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.app {
+  width: 90%;
+  max-width: 800px;
+  background: #181818;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  color: #1DB954;
+}
+
+.playlist-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.playlist {
+  background: #282828;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  width: 150px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.playlist:hover {
+  background: #1DB954;
+  color: #000;
+}
+
+.player {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.controls button {
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  margin: 0 10px;
+  cursor: pointer;
+  color: #1DB954;
+  transition: transform 0.2s;
+}
+
+.controls button:hover {
+  transform: scale(1.2);
+}
+
+.song-info {
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
