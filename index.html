@@ -109,11 +109,6 @@
         <div style="width:8px"></div>
       </div>
     </div>
-
-    <div class="vol-wrap" title="Volume">
-      <div class="vol-icon">🔊</div>
-      <input id="volume" class="vol-slider" type="range" min="0" max="100" value="70" />
-    </div>
   </div>
 </div>
 
@@ -143,7 +138,6 @@ const nextBtn = document.getElementById('nextBtn');
 const seek = document.getElementById('seek');
 const timeLabel = document.getElementById('timeLabel');
 const nowPlaying = document.getElementById('nowPlaying');
-const volume = document.getElementById('volume');
 document.getElementById('branchLabel').textContent = GITHUB_BRANCH;
 
 // app state
@@ -412,11 +406,6 @@ timeLabel.addEventListener('click', ()=>{
   if (isFinite(secs) && audio.duration) audio.currentTime = Math.max(0, Math.min(secs, audio.duration));
   else alert('Invalid time or no duration yet.');
 });
-
-// volume
-volume.addEventListener('input', ()=> audio.volume = Number(volume.value)/100);
-audio.volume = Number(volume.value)/100;
-
 // keyboard
 document.addEventListener('keydown', (e)=>{
   if (e.code==='Space'){ e.preventDefault(); playBtn.click(); }
@@ -431,3 +420,4 @@ buildLibrary();
 </script>
 </body>
 </html>
+
